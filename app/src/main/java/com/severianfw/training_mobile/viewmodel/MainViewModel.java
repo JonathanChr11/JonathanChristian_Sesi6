@@ -1,8 +1,11 @@
 package com.severianfw.training_mobile.viewmodel;
 
+import android.app.Application;
+
 import com.severianfw.training_mobile.data.remote.ApiConfig;
 import com.severianfw.training_mobile.data.remote.ApiService;
 import com.severianfw.training_mobile.data.remote.NbaTeamItem;
+import com.severianfw.training_mobile.data.repository.NbaTeamRepository;
 
 import java.util.List;
 
@@ -15,12 +18,16 @@ import retrofit2.Response;
 
 public class MainViewModel extends ViewModel {
 
+    private NbaTeamRepository mNbaTeamRepository;
+
+    public MainViewModel(Application application) {
+        mNbaTeamRepository = new NbaTeamRepository(application);
+    }
+
     private MutableLiveData<List<NbaTeamItem>> _nbaTeams = new MutableLiveData<>();
     public LiveData<List<NbaTeamItem>> getNbaTeamItems() {
         return _nbaTeams;
     }
-
-//    sifat datanya gabisa diubah
 
     private final ApiService mApiService = ApiConfig.getApiService();
 
@@ -38,6 +45,10 @@ public class MainViewModel extends ViewModel {
 
             }
         });
+    }
+
+    public void insertNbaItem(NbaTeamItem nbaTeamItem) {
+        mNbaTeamRepository.insert(nbaTeamItem);
     }
 
 }
